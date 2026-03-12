@@ -1,0 +1,14 @@
+# 此文件已废弃
+
+本项目已改用分平台的 cookies 管理方式。
+
+请将各平台的 cookies 文件放在 `backend/cookies/` 目录下：
+- instagram.txt
+- youtube.txt
+- tiktok.txt
+- twitter.txt
+- 等等...
+
+详细说明请查看：backend/cookies/README.md
+
+旧的 cookies.txt 已备份为 cookies.txt.backup

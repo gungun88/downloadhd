@@ -1,0 +1,96 @@
+{
+  "timestamp": "2026-03-10T11:00:23.969232",
+  "total": 12,
+  "success": 4,
+  "failed": 8,
+  "results": [
+    {
+      "success": true,
+      "platform": "YouTube Shorts",
+      "url": "https://www.youtube.com/shorts/DRhHQim5f2E",
+      "title": "搭讪空姐，一次约会直接拿下",
+      "formats_count": 51,
+      "duration": 28,
+      "uploader": "DPS深度社交",
+      "detected_platform": "Youtube"
+    },
+    {
+      "success": true,
+      "platform": "TikTok",
+      "url": "https://www.tiktok.com/@jkcisbvz9d7/video/7600341897369996575",
+      "title": "skydiving. adrenaline(Professional movements please do not imitate） #...",
+      "formats_count": 11,
+      "duration": 65,
+      "uploader": "jkcisbvz9d7",
+      "detected_platform": "TikTok"
+    },
+    {
+      "success": true,
+      "platform": "Instagram Reel 1",
+      "url": "https://www.instagram.com/reels/DTdRpvggb7q/",
+      "title": "Video by passioninvesting",
+      "formats_count": 6,
+      "duration": 31.277,
+      "uploader": "Memes and Humour",
+      "detected_platform": "Instagram"
+    },
+    {
+      "success": false,
+      "platform": "Instagram Reel 2",
+      "url": "https://www.instagram.com/reel/DT5-GosDFCt/?utm_source=ig_web_copy_link&igsh=NTc4MTIwNjQ2YQ==",
+      "error": "视频不可用或已删除"
+    },
+    {
+      "success": false,
+      "platform": "Twitter/X",
+      "url": "https://x.com/runes_leo/status/2030787396976132253?s=20",
+      "error": "解析失败，请检查链接是否正确或稍后重试"
+    },
+    {
+      "success": false,
+      "platform": "Reddit",
+      "url": "https://www.reddit.com/r/Weird/comments/1rp1vyk/herd_of_deer_licking_a_cat/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button",
+      "error": "解析失败，请检查链接是否正确或稍后重试"
+    },
+    {
+      "success": false,
+      "platform": "Facebook Post",
+      "url": "https://www.facebook.com/share/p/1MamRHBxZ9/",
+      "error": "解析失败，请检查链接是否正确或稍后重试"
+    },
+    {
+      "success": true,
+      "platform": "Facebook Reel",
+      "url": "https://www.facebook.com/reel/828068570214084",
+      "title": "The Judgment Day attack RHIYO",
+      "formats_count": 11,
+      "duration": 76.97,
+      "uploader": "WWE United Kingdom",
+      "detected_platform": "Facebook"
+    },
+    {
+      "success": false,
+      "platform": "Bilibili",
+      "url": "https://www.bilibili.com/video/BV1oVNMz5En7/?share_source=copy_web&vd_source=5e666531d6af513b81e4f1ba09eb7157",
+      "error": "访问受限，请稍后重试"
+    },
+    {
+      "success": false,
+      "platform": "Douyin",
+      "url": "https://www.douyin.com/jingxuan?modal_id=7615047548839027892",
+      "error": "解析失败，请检查链接是否正确或稍后重试"
+    },
+    {
+      "success": false,
+      "platform": "Kuaishou",
+      "url": "https://v.kuaishou.com/Jfjgrx3F",
+      "error": "解析失败，请检查链接是否正确或稍后重试"
+    },
+    {
+      "success": false,
+      "platform": "Weibo",
+      "url": "https://video.weibo.com/show?fid=1034:5264869621170242",
+      "error": "解析失败，请检查链接是否正确或稍后重试"
+    }
+  ]
+}

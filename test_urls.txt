@@ -1,0 +1,20 @@
+# 平台测试链接配置
+# 格式: 平台名称 | 测试URL
+
+# 已测试 - 成功
+YouTube Shorts | https://www.youtube.com/shorts/DRhHQim5f2E
+TikTok | https://www.tiktok.com/@jkcisbvz9d7/video/7600341897369996575
+
+# 国际平台
+Instagram Reel 1 | https://www.instagram.com/reels/DTdRpvggb7q/
+Instagram Reel 2 | https://www.instagram.com/reel/DT5-GosDFCt/?utm_source=ig_web_copy_link&igsh=NTc4MTIwNjQ2YQ==
+Twitter/X | https://x.com/runes_leo/status/2030787396976132253?s=20
+Reddit | https://www.reddit.com/r/Weird/comments/1rp1vyk/herd_of_deer_licking_a_cat/?utm_source=share&utm_medium=web3x&utm_name=web3xcss&utm_term=1&utm_content=share_button
+Facebook Post | https://www.facebook.com/share/p/1MamRHBxZ9/
+Facebook Reel | https://www.facebook.com/reel/828068570214084
+
+# 中国平台
+Bilibili | https://www.bilibili.com/video/BV1oVNMz5En7/?share_source=copy_web&vd_source=5e666531d6af513b81e4f1ba09eb7157
+Douyin | https://www.douyin.com/jingxuan?modal_id=7615047548839027892
+Kuaishou | https://v.kuaishou.com/Jfjgrx3F
+Weibo | https://video.weibo.com/show?fid=1034:5264869621170242
