@@ -231,7 +231,7 @@ const Gallery = () => {
             >
               <div className="flex items-start gap-2 px-3 py-2 bg-red-50 dark:bg-red-900/20 border border-red-200 dark:border-red-800 rounded-xl">
                 <AlertCircle className="w-4 h-4 text-red-600 dark:text-red-400 shrink-0 mt-0.5" />
-                <p className="text-xs text-red-600 dark:text-red-400">{renderErrorMessage(error)}</p>
+                <p className="text-xs text-red-600 dark:text-red-400 break-words">{renderErrorMessage(error)}</p>
               </div>
             </motion.div>
           )}
