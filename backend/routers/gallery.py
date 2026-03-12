@@ -253,63 +253,48 @@ async def parse_gallery_async(url: str, cookies: str | None = None, username: st
         return (None, None)
 
     try:
-        # 针对 Instagram 链接，优先使用 Instaloader（最适合图集）
+        # 针对 Instagram 链接，优先使用 gallery-dl + cookies（因为 Instaloader 不支持 Netscape cookies）
         is_instagram = "instagram.com" in url.lower()
 
-        if is_instagram:
-            logger.info("[GALLERY_PARSE_ATTEMPT_1] Instagram detected, trying Instaloader first")
-            try:
-                # 先获取 cookies（如果有的话）
-                cookies_file_path, cookie_id = await _get_cookies()
-                result = await parse_instagram_with_instaloader(url, cookies_file_path)
-
-                # 标记 cookies 成功
-                if cookie_id and platform:
-                    try:
-                        await cookies_pool.mark_success(platform, cookie_id)
-                    except Exception:
-                        pass
-
-                return result
-            except ValueError as insta_err:
-                # Instaloader 失败，记录日志并继续尝试 gallery-dl
-                logger.warning(f"[GALLERY_PARSE_ATTEMPT_1] Instaloader failed: {insta_err}, trying gallery-dl")
-
-                # 标记 cookies 失败
-                if cookie_id and platform:
-                    try:
-                        await cookies_pool.mark_failure(platform, cookie_id)
-                    except Exception:
-                        pass
-
-        # 第二次尝试：gallery-dl 不使用 cookies（除非用户提供了用户名密码）
+        # 第一次尝试：对于 Instagram，直接使用 cookies；其他平台先不用 cookies
         cmd = ["gallery-dl", "--dump-json"]
 
         if username and password:
             # 用户提供了用户名密码，直接使用
             cmd.extend(["--username", username, "--password", password])
-            logger.info(f"[GALLERY_PARSE_ATTEMPT_2] Using username/password")
+            logger.info(f"[GALLERY_PARSE_ATTEMPT_1] Using username/password")
+        elif is_instagram:
+            # Instagram 图集需要 cookies，直接获取并使用
+            logger.info(f"[GALLERY_PARSE_ATTEMPT_1] Instagram detected, trying gallery-dl with cookies first")
+            cookies_file_path, cookie_id = await _get_cookies()
+
+            if cookies_file_path:
+                cmd.extend(["--cookies", cookies_file_path])
+                logger.info(f"[GALLERY_PARSE_ATTEMPT_1] Using cookies for Instagram")
+            else:
+                logger.warning(f"[GALLERY_PARSE_ATTEMPT_1] No cookies available for Instagram, trying without")
         else:
-            logger.info(f"[GALLERY_PARSE_ATTEMPT_2] Trying gallery-dl without cookies")
+            logger.info(f"[GALLERY_PARSE_ATTEMPT_1] Trying gallery-dl without cookies")
 
         cmd.append(url)
 
-        # 执行第二次尝试
+        # 执行第一次尝试
         result = await _run_gallery_dl(cmd)
         output = result.stdout.strip()
         error_output = result.stderr.strip() if result.stderr else ""
 
-        # 检查是否需要 cookies（第二次失败）
-        needs_cookies = False
+        # 检查是否需要重试
+        needs_retry = False
         if not output or result.returncode != 0:
             # 判断是否是需要登录的错误
-            needs_cookies = any(keyword in error_output.lower() for keyword in [
+            needs_retry = any(keyword in error_output.lower() for keyword in [
                 "login", "authentication", "403", "forbidden",
                 "unauthorized", "401", "private", "requires login"
             ])
 
-            if needs_cookies and not username:  # 如果已经用了用户名密码就不重试了
-                logger.info(f"[GALLERY_PARSE_ATTEMPT_3] gallery-dl failed with auth error, retrying with cookies")
+            # 第二次尝试：如果第一次失败且不是 Instagram（Instagram 已经用过 cookies 了）
+            if needs_retry and not is_instagram and not username:
+                logger.info(f"[GALLERY_PARSE_ATTEMPT_2] gallery-dl failed with auth error, retrying with cookies")
                 # 获取 cookies 并重试
                 cookies_file_path, cookie_id = await _get_cookies()
 
@@ -319,12 +304,31 @@ async def parse_gallery_async(url: str, cookies: str | None = None, username: st
 
                 # 重新构建命令（使用 cookies）
                 cmd = ["gallery-dl", "--dump-json", "--cookies", cookies_file_path, url]
-                logger.info(f"[GALLERY_PARSE_ATTEMPT_3] Retrying gallery-dl with cookies")
+                logger.info(f"[GALLERY_PARSE_ATTEMPT_2] Retrying gallery-dl with cookies")
 
-                # 执行第三次尝试
+                # 执行第二次尝试
                 result = await _run_gallery_dl(cmd)
                 output = result.stdout.strip()
                 error_output = result.stderr.strip() if result.stderr else ""
+
+            # 第三次尝试：如果是 Instagram 且 gallery-dl 失败，尝试 Instaloader 作为最后手段
+            elif is_instagram and needs_retry:
+                logger.info(f"[GALLERY_PARSE_ATTEMPT_2] gallery-dl failed for Instagram, trying Instaloader as fallback")
+                try:
+                    # 标记 gallery-dl cookies 失败
+                    if cookie_id and platform:
+                        try:
+                            await cookies_pool.mark_failure(platform, cookie_id)
+                        except Exception:
+                            pass
+
+                    # 尝试 Instaloader（虽然不支持 cookies，但可以试试）
+                    result_insta = await parse_instagram_with_instaloader(url, cookies_file_path)
+                    return result_insta
+                except ValueError as insta_err:
+                    # Instaloader 也失败了，继续走正常错误处理流程
+                    logger.warning(f"[GALLERY_PARSE_ATTEMPT_2] Instaloader also failed: {insta_err}")
+                    # 不 return，继续执行下面的错误处理
 
         # 检查输出内容
         if not output:
